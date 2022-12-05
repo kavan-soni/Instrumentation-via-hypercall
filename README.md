@@ -17,7 +17,12 @@ Shrey Miteshbhai Nadiadwala ()
 - Researched and implemented how to make code changes
 - Created documentation
 
+Steps:
 
+1. As done in assignment 1, setup gcp instance, clone Linux repo, build kernel, and reboot.
+2. Update linux/arch/x86/kvm/cpuid.c and linux/arch/x86/kvm/vmx/vmx.c
+3. compile the kernel code changes by executing sudo make -j && make modules && make install && make modules_install
+4. 
 
 
 
