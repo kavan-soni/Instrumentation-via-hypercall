@@ -39,6 +39,7 @@ Steps to reproduce:
 8. Check kernel version using ***uname -a*** and start nested VM using ***sudo virt-manager***
 9. In the new window under QEMU/KVM open the inner virtual machine. 
 10. Create test.c in this VM and execute it. 
+11. Check the kernel logs in outer VM using ***tail -n20 /var/log/kern.log***
 
 
 
