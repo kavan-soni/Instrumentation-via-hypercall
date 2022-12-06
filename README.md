@@ -19,12 +19,26 @@ Shrey Miteshbhai Nadiadwala (015331134)
 - Created nested VM L2 in GCP by running Ubuntu OS in Google Remote Desktop where UI is enabled. Used virt-manager and qemu to create nested VM to execute test file. 
 - Created documentation
 
-Steps:
+Steps to reproduce:
 
-1. As done in assignment 1, setup gcp instance, clone Linux repo, build kernel, and reboot.
-2. Update linux/arch/x86/kvm/cpuid.c and linux/arch/x86/kvm/vmx/vmx.c
-3. compile the kernel code changes by executing sudo make -j && make modules && make install && make modules_install
-4. 
+1. Fork and then clone Linus Torvalds Linux repo - ***git clone https://github.com/shreynadiadwala/linux***
+2. Install necessary dependencies- 
+   ***sudo bash***
+   ***apt-get install build-essential kernel-package fakeroot libncurses5-dev libssl-dev ccache bison flex libelf-dev***
+3. Check the current kernel version - "uname -a".
+4. Build linux kernel for the first time - 
+   ***cd linux ***
+   ***cp /boot/$(uname -a) ./.config***
+   ***make oldconfig***  (keep pressing enter to use default setting for everything)
+   ***make -j 8 modules && make -j 8 && make modules_install && make install reboot***
+   ***uname -a***   Again check kernel version, it should be updated
+5. Implemented assignment functionlity by updating cpuid.c and vmx.c files.
+6. Setting up KVM to build nested L2 VM. 
+   ***sudo apt-get install qemu-kvm libvirt-bin bridge-utils virt-manager***
+7. Launch Ubuntu in GCP using this guide - https://ubuntu.com/blog/launch-ubuntu-desktop-on-google-cloud
+8. Check kernel version using ***uname -a*** and start nested VM using ***sudo virt-manager***
+9. In the new window under QEMU/KVM open the inner virtual machine. 
+10. Create test.c in this VM and execute it. 
 
 
 
