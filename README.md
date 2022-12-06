@@ -25,13 +25,18 @@ Steps to reproduce:
 2. Install necessary dependencies- 
    ***sudo bash***
    ***apt-get install build-essential kernel-package fakeroot libncurses5-dev libssl-dev ccache bison flex libelf-dev***
-3. Check the current kernel version - "uname -a".
+3. Check the current kernel version - ***uname -a***
 4. Build linux kernel for the first time - 
    ***cd linux***
+   
    ***cp /boot/$(uname -a) ./.config***
+   
    ***make oldconfig***  (keep pressing enter to use default setting for everything)
+   
    ***make -j 8 modules && make -j 8 && make modules_install && make install reboot***
+   
    ***uname -a***   Again check kernel version, it should be updated
+
 5. Implemented assignment functionlity by updating cpuid.c and vmx.c files.
 6. Setting up KVM to build nested L2 VM. 
    ***sudo apt-get install qemu-kvm libvirt-bin bridge-utils virt-manager***
