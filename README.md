@@ -21,32 +21,6 @@ Shrey Miteshbhai Nadiadwala (015331134)
 
 Steps to reproduce:
 
-<<<<<<< Updated upstream
-1. Fork and then clone Linus Torvalds Linux repo - ***git clone https://github.com/shreynadiadwala/linux***
-2. Install necessary dependencies- 
-   ***sudo bash***
-   ***apt-get install build-essential kernel-package fakeroot libncurses5-dev libssl-dev ccache bison flex libelf-dev***
-3. Check the current kernel version - ***uname -a***
-4. Build linux kernel for the first time - 
-   ***cd linux***
-   
-   ***cp /boot/$(uname -a) ./.config***
-   
-   ***make oldconfig***  (keep pressing enter to use default setting for everything)
-   
-   ***make -j 8 modules && make -j 8 && make modules_install && make install reboot***
-   
-   ***uname -a***   Again check kernel version, it should be updated
-
-5. Implemented assignment functionlity by updating cpuid.c and vmx.c files.
-6. Setting up KVM to build nested L2 VM. 
-   ***sudo apt-get install qemu-kvm libvirt-bin bridge-utils virt-manager***
-7. Launch Ubuntu in GCP using this guide - https://ubuntu.com/blog/launch-ubuntu-desktop-on-google-cloud
-8. Check kernel version using ***uname -a*** and start nested VM using ***sudo virt-manager***
-9. In the new window under QEMU/KVM open the inner virtual machine. 
-10. Create test.c in this VM and execute it. 
-11. Check the kernel logs in outer VM using ***tail -n20 /var/log/kern.log***
-=======
 1. Setup gcp instance with following configuration:
     Ubuntu 22.04 LTS (x86/64, amd64) with 200 GB SSD persistent disk and nested virtualisation enabled. Enable display device.
     ```
@@ -56,7 +30,6 @@ Steps to reproduce:
     ```
     gcloud compute ssh --project=cmpe283-370901 --zone=us-west1-a instance-1
     ```
->>>>>>> Stashed changes
 
 3. Fork and then clone Linus Torvalds Linux repo - git clone https://github.com/shreynadiadwala/linux
 
