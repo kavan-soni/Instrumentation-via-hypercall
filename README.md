@@ -27,7 +27,7 @@ Steps to reproduce:
    ***apt-get install build-essential kernel-package fakeroot libncurses5-dev libssl-dev ccache bison flex libelf-dev***
 3. Check the current kernel version - "uname -a".
 4. Build linux kernel for the first time - 
-   ***cd linux ***
+   ***cd linux***
    ***cp /boot/$(uname -a) ./.config***
    ***make oldconfig***  (keep pressing enter to use default setting for everything)
    ***make -j 8 modules && make -j 8 && make modules_install && make install reboot***
