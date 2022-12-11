@@ -80,6 +80,10 @@ MODULE_LICENSE("GPL");
 //-------------------------------------------------------------------------------------------------
 extern atomic64_t totalExits;
 extern atomic64_t totalTime;
+//assg3 changes -----------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+extern atomic_t array_exits[70];
+extern atomic_t array_time[70];
 
 #ifdef MODULE
 static const struct x86_cpu_id vmx_cpu_id[] = {
@@ -6446,12 +6450,36 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 		return handle_ept_misconfig(vcpu);
 #endif
 
+	
+
 	exit_handler_index = array_index_nospec((u16)exit_reason.basic,
 						kvm_vmx_max_exit_handlers);
 	if (!kvm_vmx_exit_handlers[exit_handler_index])
 		goto unexpected_vmexit;
 
-	return kvm_vmx_exit_handlers[exit_handler_index](vcpu);
+//assg3 changes -------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+	arch_atomic_inc(&totalExits);
+
+	if (exit_reason.basic < 70) {
+		arch_atomic_inc(&array_exits[(int)exit_reason.basic]);
+	}
+
+	u64 start_time = rdtsc();
+	int exit_handler_status;
+
+	exit_handler_status = kvm_vmx_exit_handlers[exit_handler_index](vcpu);
+
+	u64 end_time = rdtsc();
+
+	arch_atomic64_add((end_time - start_time), &totalTime);
+
+	if (exit_reason.basic < 70) {
+		arch_atomic64_add((end_time - start_time), &array_time[(int)exit_reason.basic]);
+	}
+
+	return exit_handler_status;
 
 unexpected_vmexit:
 	vcpu_unimpl(vcpu, "vmx: unexpected exit reason 0x%x\n",
@@ -6470,13 +6498,13 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
 {
 //assg2 changes -------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------
-	int ret;
-	u64 start_time = rdtsc();
-	atomic64_inc(&totalExits);
+	//int ret;
+	//u64 start_time = rdtsc();
+	//atomic64_inc(&totalExits);
 
 	ret = __vmx_handle_exit(vcpu, exit_fastpath);
 
-	atomic64_add(rdtsc() - start_time, &totalTime);
+	//atomic64_add(rdtsc() - start_time, &totalTime);
 
 	/*
 	 * Exit to user space when bus lock detected to inform that there is

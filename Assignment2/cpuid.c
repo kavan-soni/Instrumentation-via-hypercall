@@ -40,6 +40,14 @@ EXPORT_SYMBOL(totalExits);
 atomic64_t totalTime = ATOMIC_INIT(0);
 EXPORT_SYMBOL(totalTime);
 
+
+//assg3 changes ----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------
+atomic_t array_exits[70];
+EXPORT_SYMBOL(array_exits);
+atomic64_t array_time[70];
+EXPORT_SYMBOL(array_time);
+
 u32 xstate_required_size(u64 xstate_bv, bool compacted)
 {
 	int feature_bit = 0;
@@ -1503,8 +1511,10 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	eax = kvm_rax_read(vcpu);
 	ecx = kvm_rcx_read(vcpu);
 
+	u32 ecx_temp;
 
-//ass2 changes -----------------------------------------------------------------------------------------------------------------------
+
+//assg2 changes -----------------------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------------------------------------
 	if (eax == 0x4ffffffc) 
 	{ 
@@ -1540,7 +1550,47 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 			ecx = (atomic64_read(&totalTime) & 0xFFFFFFFF);
 			printk("The Low 32 bits of total time spent processing exits in ecx = %d", ecx); 
 		} 
-	} 
+	}
+//assg3 changes -----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------------------
+
+	else if(eax == 0x4ffffffe) 
+	{
+		if (ecx >= 0 && ecx <= 69 && ecx != 35 && ecx != 38 && ecx != 42) {
+			if (ecx != 5 && ecx != 6 && ecx != 11 && ecx != 17 && ecx != 65 && ecx != 66 && ecx != 69){
+				ecx_temp = ecx;
+				eax = arch_atomic_read(&array_exits[(int)ecx]);
+				printk(KERN_INFO "### Type %u Exit Count = %u", ecx_temp, eax);
+
+			}else{
+				printk(KERN_INFO "### Exit Number in ECX Defined in SDM But Not Enabled in KVM ");
+				eax = 0; ebx = 0; ecx = 0; edx = 0;
+			}
+		}else {
+			printk(KERN_INFO "### Exit Number in ECX Not Defined in SDM ");
+			eax = 0; ebx = 0; ecx = 0; edx = 0xFFFFFFFF;	
+		}
+
+	}
+
+	else if(eax == 0x4fffffff) 
+	{
+
+		if (ecx >= 0 && ecx <= 69 && ecx != 35 && ecx != 38 && ecx != 42) {
+			if (ecx != 5 && ecx != 6 && ecx != 11 && ecx != 17 && ecx != 65 && ecx != 66 && ecx != 69){
+				ecx_temp = ecx;
+				ebx = (atomic64_read(&array_time[(int)ecx]) >> 32);
+				ecx = (atomic64_read(&array_time[(int)ecx]) & 0xFFFFFFFF);
+				printk(KERN_INFO "### Type %u CPU Exit Cycle Time = %llu", ecx_temp);
+			}else{
+				printk(KERN_INFO "### Exit Number in ECX Defined in SDM But Not Enabled in KVM ");
+				eax = 0; ebx = 0; ecx = 0; edx = 0;
+			}
+		}else {
+			printk(KERN_INFO "### Exit Number in ECX Not Defined in SDM ");
+			eax = 0; ebx = 0; ecx = 0; edx = 0xFFFFFFFF;	
+		}
+	}
 
 	else {
 	kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, false); 
