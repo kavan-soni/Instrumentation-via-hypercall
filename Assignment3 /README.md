@@ -98,3 +98,17 @@ Steps to reproduce:
 17. Follow GUI prompts to create a new VM using the iso image we downloaded in previous step. Verify L2 VM by running ```uname -a``` in terminal.
 
 18. Run test files in L2 VM terminal.
+
+## Assignment 3 Q/A
+
+1. Comment on the frequency of exits – does the number of exits increase at a stable rate? Or are there 
+more exits performed during certain VM operations? Approximately how many exits does a full VM 
+boot entail? 
+
+Ans - a) Not particularly, frequency of exits stays the same, yet for a few exits it raise a bit. Increase rate varies from exit to exit. 
+      b) Yes, more exits are performed during certain VM operations.
+      c) 
+   
+2. Of the exit types defined in the SDM, which are the most frequent? Least?
+
+Ans - Most frequent exits are MSR Access (32) and EPT Violation (48), while least frequent are MOV DR (29) and WBINVD (54)
