@@ -105,9 +105,8 @@ Steps to reproduce:
 more exits performed during certain VM operations? Approximately how many exits does a full VM 
 boot entail? 
 
-Ans - a) Not particularly, frequency of exits stays the same, yet for a few exits it raise a bit. Increase rate varies from exit to exit. 
-      b) Yes, more exits are performed during certain VM operations.
-      c) 
+Ans - a) Yes, for exits such as HLT(10) and CPUID(12) it increases at a stable rate. Increase rate varied from exit to exit. Yes, more exits are performed during certain VM operations. A full VM boot entails approximately 931512 exits.
+     
    
 2. Of the exit types defined in the SDM, which are the most frequent? Least?
 
